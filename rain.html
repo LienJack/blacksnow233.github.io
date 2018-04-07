@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>黑客帝国代码雨</title>
+        <style type="text/css">
+            html,body{width: 100%;height: 100%;}
+            body{
+                background: #000;
+                overflow: hidden;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="cvs"></canvas>
+        <script type="text/javascript">
+            var cvs = document.getElementById("cvs"); 
+            var ctx = cvs.getContext("2d");
+            var cw = cvs.width = document.body.clientWidth;
+            var ch = cvs.height = document.body.clientHeight; 
+            var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+            var codeRainArr = []; 
+            var cols = parseInt(cw/14); 
+            var step = 16 ;   
+            ctx.font = " 30px microsoft yahei"; 
+            //创建代码雨
+            function createCodeRain() {
+                for (var n = 0; n < cols; n++) {
+                    var col = []; 
+                    var basePos = parseInt(Math.random()*300);
+                    var speed = parseInt(Math.random()*10)+3;
+                    var colx = parseInt(Math.random()*cw)
+                    for (var i = 0; i < parseInt(ch/step)/2; i++) {
+                        var code = {
+                            x : colx, 
+                            y : -(step*i)-basePos, 
+                            speed : speed, 
+                            //text : parseInt(Math.random()*10)%2 == 0 ? 0 : 1  //随机生成0或者1
+                          	text : ["a","b","c","d","e","f","g","h","o","s","x"][parseInt(Math.random()*11)] //随机生成字母数组中的一个
+                        }
+                        col.push(code);  
+                    }
+                    codeRainArr.push(col);
+                }
+            }
+            
+            function codeRaining(){
+                
+                ctx.clearRect(0,0,cw,ch);
+                for (var n = 0; n < codeRainArr.length; n++) {
+                    
+                    col = codeRainArr[n];
+                    
+                    for (var i = 0; i < col.length; i++) {
+                        var code = col[i]; 
+                        if(code.y > ch){ 
+                            
+                            code.y = 0;
+                        }else{
+                           
+                            code.y += code.speed;
+                        }
+                        
+                        ctx.fillStyle = "hsl("+(parseInt(Math.random()*359)+1)+",30%,"+(50-i*2)+"%)"; 
+                        
+                        ctx.fillText(code.text,code.x,code.y);
+                    }
+                }
+                requestAnimationFrame(codeRaining);
+            }
+            
+            createCodeRain();
+            
+            requestAnimationFrame(codeRaining);
+        </script>
+    </body>
+</html>
